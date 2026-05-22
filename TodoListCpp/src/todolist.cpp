@@ -8,6 +8,7 @@
 #include "todolist.h"
 
 #include <sstream>
+#include <print>
 #include <ctime>
 
 // Finds the first available empty slot in the task array.
@@ -51,7 +52,7 @@ bool TodoList::addTask(const std::string &title, const std::string &description,
 
     taskCount++;
 
-    std::cout << "Task added successfully!" << std::endl;
+    std::println("Task added successfully!");
 
     return true;
 }
@@ -69,7 +70,7 @@ bool TodoList::removeTask(size_t index)
 
     taskCount--;
 
-    std::cout << "Task removed successfully!" << std::endl;
+    std::println("Task removed successfully!");
 
     return true;
 }
@@ -90,15 +91,13 @@ size_t TodoList::clearCompleted()
 
     taskCount -= removed;
 
-    std::cout << "Removed " << removed << " completed task(s)." << std::endl;
+    std::println("Removed {} completed task(s).", removed);
 
     return removed;
 }
 
 // Updates a task title and description.
-bool TodoList::editTask(size_t index,
-                        const std::string &newTitle,
-                        const std::string &newDescription)
+bool TodoList::editTask(size_t index, const std::string &newTitle, const std::string &newDescription)
 {
     if (index >= MAX_TASKS || !tasks[index].has_value())
     {
@@ -119,7 +118,7 @@ bool TodoList::editTask(size_t index,
         tasks[index]->description = newDescription;
     }
 
-    std::cout << "Task updated successfully!" << std::endl;
+    std::println("Task updated successfully!");
 
     return true;
 }
@@ -135,7 +134,7 @@ bool TodoList::setPriority(size_t index, Priority priority)
 
     tasks[index]->priority = priority;
 
-    std::cout << "Priority updated successfully!" << std::endl;
+    std::println("Priority updated successfully!");
 
     return true;
 }
@@ -151,7 +150,7 @@ bool TodoList::markInProgress(size_t index)
 
     tasks[index]->status = Status::InProgress;
 
-    std::cout << "Task marked as in progress!" << std::endl;
+    std::println("Task marked as in progress!");
 
     return true;
 }
@@ -169,7 +168,7 @@ bool TodoList::markCompleted(size_t index)
 
     tasks[index]->completedAt = std::chrono::system_clock::now();
 
-    std::cout << "Task marked as completed!" << std::endl;
+    std::println("Task marked as completed!");
 
     return true;
 }
@@ -187,7 +186,7 @@ bool TodoList::markPending(size_t index)
 
     tasks[index]->completedAt = std::nullopt;
 
-    std::cout << "Task marked as pending!" << std::endl;
+    std::println("Task marked as pending!");
 
     return true;
 }
@@ -219,7 +218,7 @@ std::string TodoList::priorityToString(Priority p) const
         return "High";
 
     default:
-        return "Unknown";
+        return "Invalid Priority";
     }
 }
 
@@ -238,7 +237,7 @@ std::string TodoList::statusToString(Status s) const
         return "Completed";
 
     default:
-        return "Unknown";
+        return "Invalid Status";
     }
 }
 
@@ -268,12 +267,12 @@ void TodoList::displayAll() const
 {
     if (isEmpty())
     {
-        std::cout << "No tasks in the list." << std::endl;
+        std::println("No tasks in the list.");
 
         return;
     }
 
-    std::cout << "\nTodo List\n";
+    std::println("\nTodo List");
 
     for (size_t i = 0; i < MAX_TASKS; ++i)
     {
@@ -294,7 +293,7 @@ void TodoList::displayAll() const
 
             if (!task.description.empty())
             {
-                std::cout << "Description: " << task.description << "\n";
+                std::println("Description: {}", task.description);
             }
 
             std::cout << "\n";
@@ -319,7 +318,7 @@ void TodoList::displayByStatus(Status status) const
 
     if (!found)
     {
-        std::cout << "No tasks found." << std::endl;
+        std::println("No tasks found.");
     }
 }
 
@@ -340,7 +339,7 @@ void TodoList::displayByPriority(Priority priority) const
 
     if (!found)
     {
-        std::cout << "No tasks found." << std::endl;
+        std::println("No tasks found.");
     }
 }
 
@@ -366,7 +365,7 @@ void TodoList::search(const std::string &keyword) const
 
     if (!found)
     {
-        std::cout << "No matching tasks found." << std::endl;
+        std::println("No matching tasks found.");
     }
 }
 
@@ -391,7 +390,7 @@ void TodoList::sortByPriority()
     // tasks = tempTasks;
     std::copy(tempTasks.begin(), tempTasks.end(), tasks.begin());
 
-    std::cout << "Tasks sorted by priority." << std::endl;
+    std::println("Tasks sorted by priority.");
 }
 
 // Sorts tasks based on workflow status.
@@ -417,7 +416,7 @@ void TodoList::sortByStatus()
     // tasks = tempTasks;
     std::copy(tempTasks.begin(), tempTasks.end(), tasks.begin());
 
-    std::cout << "Tasks sorted by status." << std::endl;
+    std::println("Tasks sorted by status.");
 }
 
 // Counts tasks with a specific status.
@@ -465,7 +464,7 @@ void TodoList::clearAll()
 
     taskCount = 0;
 
-    std::cout << "All tasks cleared." << std::endl;
+    std::println("All tasks cleared.");
 }
 
 // Calculates the percentage of completed tasks.
@@ -482,41 +481,19 @@ double TodoList::getCompletionPercentage() const
 // Displays task statistics and completion progress.
 void TodoList::displayStatistics() const
 {
-    std::cout
-        << "\nStatistics:\n";
+    std::println("\nStatistics:");
 
-    std::cout
-        << "Total Tasks: "
-        << getTotalTasks()
-        << std::endl;
+    std::println("Total Tasks: {}", getTotalTasks());
 
-    std::cout
-        << "Pending: "
-        << getCountByStatus(Status::Pending)
-        << std::endl;
+    std::println("Pending: {}",getCountByStatus(Status::Pending));
 
-    std::cout
-        << "In Progress: "
-        << getCountByStatus(Status::InProgress)
-        << std::endl;
+    std::println("In Progress: {}", getCountByStatus(Status::InProgress));
 
-    std::cout
-        << "Completed: "
-        << getCountByStatus(Status::Completed)
-        << std::endl;
+    std::println("Completed: {}", getCountByStatus(Status::Completed));
 
-    std::cout
-        << "Remaining: "
-        << getRemainingTasks()
-        << std::endl;
+    std::println("Remaining: {}", getRemainingTasks());
 
-    std::cout
-        << std::fixed
-        << std::setprecision(2);
+    std::cout << std::fixed << std::setprecision(2);
 
-    std::cout
-        << "Completion Rate: "
-        << getCompletionPercentage()
-        << "%"
-        << std::endl;
+    std::println("Completion Rate: {}%", getCompletionPercentage());
 }

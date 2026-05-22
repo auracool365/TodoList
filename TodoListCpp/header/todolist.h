@@ -89,9 +89,7 @@ public:
 
     size_t clearCompleted();
 
-    bool editTask(size_t index,
-                  const std::string &newTitle,
-                  const std::string &newDescription = "");
+    bool editTask(size_t index, const std::string &newTitle, const std::string &newDescription = "");
 
     bool setPriority(size_t index, Priority priority);
 
@@ -147,8 +145,7 @@ private:
 
     std::string statusToString(Status s) const;
 
-    std::string formatTime(
-        const std::chrono::system_clock::time_point &tp) const;
+    std::string formatTime(const std::chrono::system_clock::time_point &tp) const;
 };
 
 

@@ -26,7 +26,7 @@ void displayMenu()
 TodoList::Priority selectPriority()
 {
     int choice;
-    std::cout << "Select priority: \n (1(Low), 2(Medium), 3(High): ";
+    std::cout << "Select priority: (1(Low), 2(Medium), 3(High): ";
     std::cin >> choice;
     std::cin.ignore();
 
